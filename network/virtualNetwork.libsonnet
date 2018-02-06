@@ -2,6 +2,9 @@ local hippo = import "core/module.libsonnet";
 
 hippo.Module {
 
+    addressPrefix: '10.0.0.0/16',
+    serviceEndpoints: [],
+
     resources: {
         virtualNetwork: hippo.Resource {
             type: "Microsoft.Network/virtualNetworks",
@@ -10,7 +13,14 @@ hippo.Module {
             properties: {
                 subnets: [
                     {
-                        name: 'default'   
+                        id::
+                            '/subscriptions/[insert subscription here]/providers/Microsoft.Network/virtualNetworks/%s/subnets/%s' %
+                                [ $.name, 'default' ], 
+                        name: 'default',
+                        properties: {
+                            addressPrefix: $.addressPrefix,
+                            serviceEndpoints: $.serviceEndpoints
+                        },   
                     }
                 ],
             },
@@ -18,9 +28,7 @@ hippo.Module {
     },
 
     outputs: {
-
-
         virtualNetwork: $.resources.virtualNetwork,
-        subnet: $.resources.virtualNetwork.properties.subnets[0],
+        subnet: $.resources.virtualNetwork.properties.subnets[0].id,
     }
 }

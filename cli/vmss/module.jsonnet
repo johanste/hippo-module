@@ -28,7 +28,7 @@ hippo.Module {
             adminUserName: $.adminUserName,
             imageReference: $.imageReference,
             osType: $.osType,
-            subnet: if $.subnet != null then $.subnet else $.resources.virtualNetwork.outputs.subnet.name,
+            subnet: if $.subnet != null then $.subnet else $.resources.virtualNetwork.outputs.subnet,
         }, 
     },
     outputs::: {
