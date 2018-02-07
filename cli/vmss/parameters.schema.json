@@ -1,0 +1,88 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "type": "object",
+
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "imageReference": {
+            "type": "object",
+            "properties": {
+                "publisher": {
+                    "type": "string"
+                },
+                "offer": {
+                    "type": "string"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [ "publisher", "offer", "sku", "version" ]
+        },
+        "adminUserName": {
+            "type": "string"
+        },
+        "osType": {
+            "type": "string",
+            "enum": [
+                "Windows",
+                "Linux"
+            ]
+        },
+        "instanceCount": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "sshPublicKeys": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "subnet": {
+            "type": "string"
+        },
+        "disableOverprovision": {
+            "type": "boolean",
+            "default": false
+        },
+        "customData": {
+            "type": "string",
+            "minLength": 1
+        },
+        "licenseType": {
+            "type": "string",
+            "enum": [
+                "Windows_Client",
+                "Windows_Server"
+            ]
+        },
+        "upgradePolicy": {
+            "type": "string",
+            "enum": [
+                "Automatic",
+                "Manual"
+            ]
+        },
+        "vmSku": {
+            "type": "string"
+        },
+        "zones": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "name",
+        "imageReference",
+        "adminUserName",
+        "osType"
+    ]
+}
