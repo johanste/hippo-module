@@ -4,8 +4,9 @@ core.Module {
 
     parameters:: {},
     
-    overProvision:: true,
+    overprovision:: true,
     capacity:: 2,
+    vmSku: 'Standard_D1_v2',
     upgradePolicy:: 'Manual',
     singlePlacementGroup:: true,
     storageAccountType:: null,
@@ -18,7 +19,9 @@ core.Module {
     subnet:: error "'subnet' is a required parameter",
     loadBalancerBackendAddressPool:: null,
     loadBalancerBackendInboundNatPool:: null,
-
+    zones: [],
+    customData:: null,
+    licenseType:: null,
     sshPublicKeys: [],
     resources: {
         virtualMachineScaleSet: core.Resource {
@@ -26,13 +29,15 @@ core.Module {
             name: $.name,
 
             sku: {
-                name: 'Standard_D1_v2',
+                name: $.vmSku,
                 capactiy: $.capacity,
             },
+            [if $.zones != [] then 'zones']: $.zones,
             properties: {
-                overprovision: $.overProvision,
+                overprovision: $.overprovision,
                 upgradePolicy: { mode: $.upgradePolicy },
-                singlePlaceentGroup: $.singlePlacementGroup,
+                licenseType: $.licenseType,
+                singlePlacementGroup: $.singlePlacementGroup,
                 virtualMachineProfile: {
                     storageProfile: {
                         osDisk: {
@@ -45,6 +50,7 @@ core.Module {
                     osProfile: {
                         computerNamePrefix: $.name,
                         adminUserName: $.adminUserName,
+                        [if $.customData != null then 'customData']: std.base64($.customData),
                         [if $.osType == 'Linux' then 'linuxConfiguration']: {
                             disablePasswordAuthentication: $.adminUserPassword == null,
                             ssh: {

@@ -14,7 +14,14 @@ hippo.Module {
     imageReference: error "'imageReference' is a required parameter",
     subnet: null, # TODO: need to exposed subnet id  
     loadBalancerBackendAddressPool: $.resources.loadBalancer.outputs.backendAddressPool,
-   
+    disableOverprovision:: false,
+    customData:: null,
+    licenseType:: null,
+    singlePlacementGroup:: $.instanceCount <= 100,
+    upgradePolicy:: null,
+    vmSku: null,
+    zones: [],
+
     resources +: {
         [if $.subnet == null then 'virtualNetwork']:
             network.VirtualNetwork {
@@ -28,7 +35,15 @@ hippo.Module {
             adminUserName: $.adminUserName,
             imageReference: $.imageReference,
             osType: $.osType,
+            overprovision: ! $.disableOverprovision,
+            customData: $.customData,
+            capacity: $.instanceCount,
             subnet: if $.subnet != null then $.subnet else $.resources.virtualNetwork.outputs.subnet,
+            licenseType: $.licenseType,
+            singlePlacementGroup: $.singlePlacementGroup,
+            [if $.upgradePolicy != null then 'upgradePolicy']: $.upgradePolicy,
+            [if $.vmSku != null then 'vmSku']: $.vmSku,
+            [if $.zones != [] then 'zones']: $.zones,
         }, 
     },
     outputs::: {
