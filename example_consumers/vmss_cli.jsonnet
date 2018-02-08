@@ -21,6 +21,6 @@
         licenseType: 'Windows_Server',
         upgradePolicy: 'Automatic',
         vmSku: 'Standard_DS1_V2',
-        zones: [ '1', '3' ],
+        zones: [ '1', '3' ], 
     }
 ]
